@@ -1,43 +1,184 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Formulário Simples</title>
-</head>
-<body>
-  <h1>Envie seus dados</h1>
+  <title>✨ Avaliação ProTime</title>
 
-  <form id="form">
-    <input type="text" id="nome" placeholder="Seu nome" required><br><br>
-    <input type="email" id="email" placeholder="Seu email" required><br><br>
-    <textarea id="mensagem" placeholder="Sua mensagem" required></textarea><br><br>
-    <button type="submit">Enviar</button>
-  </form>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #4f46e5, #6d28d9);
+      margin: 0;
+      padding: 0;
+      color: #fff;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: 40px auto;
+      background: #ffffff20;
+      backdrop-filter: blur(12px);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 18px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    select, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+    }
+
+    textarea {
+      height: 80px;
+      resize: vertical;
+    }
+
+    button {
+      margin-top: 25px;
+      width: 100%;
+      padding: 14px;
+      font-size: 18px;
+      font-weight: bold;
+      background: #10b981;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      background: #059669;
+    }
+
+    .emoji {
+      font-size: 22px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>💜 Avaliação da ProTime</h1>
+
+    <form id="form">
+
+      <!-- Perguntas de 1 a 5 -->
+      <label>Facilidade de uso (1 a 5) ⭐</label>
+      <select id="facilidade" required>
+        <option value="">Selecione...</option>
+        <option>1 - Muito difícil</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5 - Muito fácil</option>
+      </select>
+
+      <label>Utilidade na rotina médica (1 a 5) 🩺</label>
+      <select id="utilidade" required>
+        <option value="">Selecione...</option>
+        <option>1 - Não ajudou</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5 - Muito útil</option>
+      </select>
+
+      <label>Velocidade e eficiência (1 a 5) ⚡</label>
+      <select id="velocidade" required>
+        <option value="">Selecione...</option>
+        <option>1 - Muito lento</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5 - Muito rápido</option>
+      </select>
+
+      <label>Clareza das informações e suporte (1 a 5) 💬</label>
+      <select id="clareza" required>
+        <option value="">Selecione...</option>
+        <option>1 - Pouco claro</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5 - Muito claro</option>
+      </select>
+
+      <!-- Perguntas abertas -->
+      <label>O que mais te ajudou na ProTime? 💡</label>
+      <textarea id="ajudou"></textarea>
+
+      <label>O que faltou ou poderia melhorar? 🔧</label>
+      <textarea id="melhorar"></textarea>
+
+      <label>Em quais momentos a ProTime foi mais útil? ⏱️</label>
+      <textarea id="momentos"></textarea>
+
+      <label>Se pudesse mudar uma única coisa, o que seria? 🎯</label>
+      <textarea id="mudar"></textarea>
+
+      <label>Você entrou na parte de benefício? O que achou? 🎁</label>
+      <textarea id="beneficio"></textarea>
+
+      <label>Como você descreve sua experiência geral? ⭐</label>
+      <textarea id="experiencia"></textarea>
+
+      <button type="submit">Enviar avaliação 🚀</button>
+    </form>
+  </div>
 
   <script type="module">
     import { createClient } from "https://esm.sh/@supabase/supabase-js";
 
     const SUPABASE_URL = "https://nbxbcyvygrpykvyuzfbz.supabase.co";
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ieGJjeXZ5Z3JweWt2eXV6ZmJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUyMjI2OTAsImV4cCI6MjA4MDc5ODY5MH0.459vmlv099lxlUay568X8Y5Y853tiIiWqtKbPrzoP6c"; // <- CORRETO
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ieGJjeXZ5Z3JweWt2eXV6ZmJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUyMjI2OTAsImV4cCI6MjA4MDc5ODY5MH0.459vmlv099lxlUay568X8Y5Y853tiIiWqtKbPrzoP6c";
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const form = document.getElementById("form");
+
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const nome = document.getElementById("nome").value;
-      const email = document.getElementById("email").value;
-      const mensagem = document.getElementById("mensagem").value;
+      const data = {
+        facilidade: document.getElementById("facilidade").value,
+        utilidade: document.getElementById("utilidade").value,
+        velocidade: document.getElementById("velocidade").value,
+        clareza: document.getElementById("clareza").value,
+        ajudou: document.getElementById("ajudou").value,
+        melhorar: document.getElementById("melhorar").value,
+        momentos: document.getElementById("momentos").value,
+        mudar: document.getElementById("mudar").value,
+        beneficio: document.getElementById("beneficio").value,
+        experiencia: document.getElementById("experiencia").value,
+      };
 
       const { error } = await supabase
         .from("respostas")
-        .insert({ nome, email, mensagem });
+        .insert(data);
 
       if (error) {
-        alert("Erro: " + error.message);
+        alert("❌ Erro ao enviar: " + error.message);
       } else {
-        alert("Enviado com sucesso!");
+        alert("✨ Obrigado! Sua resposta foi enviada com sucesso!");
         form.reset();
       }
     });
