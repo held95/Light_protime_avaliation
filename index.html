@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Formulário Simples</title>
+</head>
+<body>
+  <h1>Envie seus dados</h1>
+
+  <form id="form">
+    <input type="text" id="nome" placeholder="Seu nome" required><br><br>
+    <input type="email" id="email" placeholder="Seu email" required><br><br>
+    <textarea id="mensagem" placeholder="Sua mensagem" required></textarea><br><br>
+    <button type="submit">Enviar</button>
+  </form>
+
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js";
+
+    const SUPABASE_URL = "SUA_URL_AQUI";
+    const SUPABASE_KEY = "SUA_CHAVE_anon_AQUI";
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const form = document.getElementById("form");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const nome = document.getElementById("nome").value;
+      const email = document.getElementById("email").value;
+      const mensagem = document.getElementById("mensagem").value;
+
+      let { error } = await supabase
+        .from("respostas")
+        .insert({ nome, email, mensagem });
+
+      if (error) {
+        alert("Erro: " + error.message);
+      } else {
+        alert("Enviado com sucesso!");
+        form.reset();
+      }
+    });
+  </script>
+</body>
+</html>
