@@ -113,6 +113,40 @@
   opacity: 1 !important;
 }
 
+    .emoji-option {
+  font-size: 34px;
+  cursor: pointer;
+  opacity: 0.45;
+  transition: transform 0.25s, opacity 0.25s;
+}
+
+.emoji-selected {
+  opacity: 1 !important;
+  transform: scale(1.35);
+  filter: drop-shadow(0 0 6px rgba(75,140,212,0.6));
+}
+
+/* pulso agradável ao clicar */
+.emoji-selected:active {
+  transform: scale(1.55);
+}
+
+.selected-text {
+  margin-top: 6px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1b3c68;
+  min-height: 20px;
+  transition: opacity .3s;
+  opacity: 0;
+}
+
+.selected-text.visible {
+  opacity: 1;
+}
+
+
     button {
       margin-top: 30px;
       width: 100%;
@@ -166,30 +200,52 @@
 
   row += `</div>`;
 
-  // textos abaixo
-  row += `<div class='emoji-labels' id='labels-${idCampo}'>`;
-  labels.forEach(t => {
-    row += `<span>${t}</span>`;
-  });
-  row += `</div>`;
+  // Texto único do emoji selecionado
+  row += `<div id='texto-${idCampo}' class='selected-text'></div>`;
 
-  // hidden
+  // Hidden para envio
   row += `<input type='hidden' id='${idCampo}' required>`;
 
   return row;
 }
 
-  function selecionarEmoji(campo, element) {
-  document.querySelectorAll(`#row-${campo} .emoji-option`)
-    .forEach(e => e.classList.remove("emoji-selected"));
 
+  function selecionarEmoji(campo, element) {
+
+  const all = document.querySelectorAll(`#row-${campo} .emoji-option`);
+  const texto = document.getElementById(`texto-${campo}`);
+  const index = element.dataset.index;
+  const labels = ["Péssimo", "Ruim", "Neutro", "Bom", "Excelente"];
+
+  // Se já está selecionado → desmarca
+  if (element.classList.contains("emoji-selected")) {
+    element.classList.remove("emoji-selected");
+    document.getElementById(campo).value = "";
+    texto.classList.remove("visible");
+    texto.innerHTML = "";
+    return;
+  }
+
+  // Limpa seleção anterior
+  all.forEach(e => e.classList.remove("emoji-selected"));
+
+  // Marca o novo
   element.classList.add("emoji-selected");
+
+  // Salva o valor
   document.getElementById(campo).value = element.dataset.value;
 
-  // mostra os textos
-  const labels = document.getElementById(`labels-${campo}`);
-  labels.classList.add("emoji-label-visible");
+  // Mostra o texto correspondente
+  texto.innerHTML = labels[index];
+  texto.classList.add("visible");
+
+  // animação extra (leve pulso)
+  element.style.transform = "scale(1.55)";
+  setTimeout(() => {
+    element.style.transform = "scale(1.35)";
+  }, 120);
 }
+
 
       </script>
 
