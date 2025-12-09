@@ -93,6 +93,26 @@
       transform: scale(1.25);
     }
 
+    .emoji-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+  opacity: 0;
+  transition: .3s;
+}
+
+.emoji-labels span {
+  width: 20%;
+  text-align: center;
+}
+
+.emoji-label-visible {
+  opacity: 1 !important;
+}
+
     button {
       margin-top: 30px;
       width: 100%;
@@ -133,28 +153,44 @@
 
 
       <script>
-         function criarLinhaEmojis(idCampo) {
+        function criarLinhaEmojis(idCampo) {
 
-    /* Emojis CLEAN / estilo Google mais amigáveis */
-    const emojis = ["😕","🙁","😐","🙂","😁"];
+  const emojis = ["😕","🙁","😐","🙂","😁"];
+  const labels = ["Péssimo", "Ruim", "Neutro", "Bom", "Excelente"];
 
-    let row = `<div class='emoji-row' id='row-${idCampo}'>`;
+  let row = `<div class='emoji-row' id='row-${idCampo}'>`;
 
-    emojis.forEach((emoji, index) => {
-      row += `<span class='emoji-option' data-value='${index+1}' onclick='selecionarEmoji("${idCampo}", this)'>${emoji}</span>`;
-    });
+  emojis.forEach((emoji, index) => {
+    row += `<span class='emoji-option' data-index='${index}' data-value='${index+1}' onclick='selecionarEmoji("${idCampo}", this)'>${emoji}</span>`;
+  });
 
-    row += `</div><input type='hidden' id='${idCampo}' required>`;
-    return row;
-  }
+  row += `</div>`;
+
+  // textos abaixo
+  row += `<div class='emoji-labels' id='labels-${idCampo}'>`;
+  labels.forEach(t => {
+    row += `<span>${t}</span>`;
+  });
+  row += `</div>`;
+
+  // hidden
+  row += `<input type='hidden' id='${idCampo}' required>`;
+
+  return row;
+}
 
   function selecionarEmoji(campo, element) {
-    document.querySelectorAll(`#row-${campo} .emoji-option`)
-      .forEach(e => e.classList.remove("emoji-selected"));
+  document.querySelectorAll(`#row-${campo} .emoji-option`)
+    .forEach(e => e.classList.remove("emoji-selected"));
 
-    element.classList.add("emoji-selected");
-    document.getElementById(campo).value = element.dataset.value;
-  }
+  element.classList.add("emoji-selected");
+  document.getElementById(campo).value = element.dataset.value;
+
+  // mostra os textos
+  const labels = document.getElementById(`labels-${campo}`);
+  labels.classList.add("emoji-label-visible");
+}
+
       </script>
 
       <!-- Avaliações -->
