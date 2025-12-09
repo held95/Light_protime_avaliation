@@ -7,35 +7,75 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <style>
-    /* Logo em círculo */
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #e6e9ec, #c9def5);
+      margin: 0;
+      padding: 0;
+      color: #1a1a1a;
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 50px auto;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(22px);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.18);
+    }
+
     .logo {
       width: 150px;
-      height: 150px;
-      object-fit: cover;
-      border-radius: 50%;
-      display: block;
       margin: 0 auto 20px;
-      border: 4px solid #1b3c68;
-      background: white;
+      display: block;
     }
 
-    /* Legendas fixas dos emojis */
-    .emoji-labels {
+    h1 {
+      text-align: center;
+      font-size: 30px;
+      margin-bottom: 30px;
+      font-weight: 700;
+      color: #1b3c68;
+    }
+
+    label {
+      display: block;
+      margin-top: 18px;
+      font-weight: 600;
+      font-size: 17px;
+      color: #1a1a1a;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 14px;
+      margin-top: 10px;
+      border-radius: 10px;
+      border: 1px solid #c5c5c5;
+      font-size: 16px;
+      background: #fff;
+      transition: .25s;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #4b8cd4;
+      box-shadow: 0 0 0 3px rgba(75,140,212,0.25);
+    }
+
+    textarea {
+      height: 90px;
+      resize: vertical;
+    }
+
+    .emoji-row {
       display: flex;
       justify-content: space-between;
-      margin-top: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      color: #1a1a1a;
-      opacity: 1 !important; /* Sempre visível */
+      margin-top: 12px;
+      padding: 8px 0;
     }
 
-    .emoji-labels span {
-      width: 20%;
-      text-align: center;
-    }
-
-    /* Ajuste visual dos emojis */
     .emoji-option {
       font-size: 34px;
       cursor: pointer;
@@ -43,92 +83,121 @@
       transition: transform 0.25s, opacity 0.25s;
     }
 
+    .emoji-option:hover {
+      transform: scale(1.18);
+      opacity: 0.85;
+    }
+
     .emoji-selected {
       opacity: 1 !important;
       transform: scale(1.35);
       filter: drop-shadow(0 0 6px rgba(75,140,212,0.6));
     }
-</style>
 
-<script>
-/* Criação dos emojis + legendas fixas */
-function criarLinhaEmojis(idCampo) {
+    .emoji-selected:active {
+      transform: scale(1.55);
+    }
 
-  const emojis = ["😕","🙁","😐","🙂","😁"];
-  const labels = ["Péssimo", "Ruim", "Neutro", "Bom", "Excelente"];
+    /* labels fixos */
+    .emoji-label-fixed {
+      font-size: 14px;
+      margin-top: 6px;
+      font-weight: 600;
+      color: #1a1a1a;
+      opacity: 0.8;
+    }
 
-  let row = `<div class='emoji-row' id='row-${idCampo}'>`;
+    button {
+      margin-top: 30px;
+      width: 100%;
+      padding: 16px;
+      font-size: 18px;
+      font-weight: 700;
+      background: #1b72d8;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: .25s;
+      letter-spacing: 0.4px;
+    }
 
-  emojis.forEach((emoji, index) => {
-    row += `<span class='emoji-option' data-index='${index}' data-value='${index+1}' onclick='selecionarEmoji("${idCampo}", this)'>${emoji}</span>`;
-  });
+    button:hover {
+      transform: scale(1.03);
+      background: #165fb1;
+    }
+  </style>
 
-  row += `</div>`;
+</head>
+<body>
+  <div class="container">
 
-  /* Legendas SEMPRE visíveis */
-  row += `<div class="emoji-labels">`;
-  labels.forEach(l => {
-    row += `<span>${l}</span>`;
-  });
-  row += `</div>`;
+    <img src="/logo.png" class="logo" alt="Logo ProTime">
 
-  /* Hidden com o valor */
-  row += `<input type='hidden' id='${idCampo}' required>`;
+    <h1>Avaliação da ProTime</h1>
 
-  return row;
-}
+    <form id="form">
 
-/* Seleção do emoji */
-function selecionarEmoji(campo, element) {
+      <label>Nome</label>
+      <input type="text" id="nome" required>
 
-  const all = document.querySelectorAll(`#row-${campo} .emoji-option`);
-
-  // Se já está selecionado → desmarca
-  if (element.classList.contains("emoji-selected")) {
-    element.classList.remove("emoji-selected");
-    document.getElementById(campo).value = "";
-    return;
-  }
-
-  // Limpa seleção anterior
-  all.forEach(e => e.classList.remove("emoji-selected"));
-
-  // Marca o novo
-  element.classList.add("emoji-selected");
-
-  // Grava valor
-  document.getElementById(campo).value = element.dataset.value;
-
-  // Animação leve
-  element.style.transform = "scale(1.55)";
-  setTimeout(() => {
-    element.style.transform = "scale(1.35)";
-  }, 120);
-}
-</script>
+      <label>E-mail</label>
+      <input type="email" id="email" required>
 
 
-  // Limpa seleção anterior
-  all.forEach(e => e.classList.remove("emoji-selected"));
+      <script>
+        function criarLinhaEmojis(idCampo) {
 
-  // Marca o novo
-  element.classList.add("emoji-selected");
+          const emojis = ["😕","🙁","😐","🙂","😁"];
+          const labels = ["Péssimo", "Ruim", "Neutro", "Bom", "Excelente"];
 
-  // Salva o valor
-  document.getElementById(campo).value = element.dataset.value;
+          let row = `<div class='emoji-row' id='row-${idCampo}'>`;
 
-  // Mostra o texto correspondente
-  texto.innerHTML = labels[index];
-  texto.classList.add("visible");
+          emojis.forEach((emoji, index) => {
+            row += `
+              <div style="text-align:center; width:20%;">
+                <span class='emoji-option' data-index='${index}' data-value='${index+1}'
+                  onclick='selecionarEmoji("${idCampo}", this)'>${emoji}</span>
+                <div class="emoji-label-fixed">${labels[index]}</div>
+              </div>
+            `;
+          });
 
-  // animação extra (leve pulso)
-  element.style.transform = "scale(1.55)";
-  setTimeout(() => {
-    element.style.transform = "scale(1.35)";
-  }, 120);
-}
+          row += `</div>`;
+
+          row += `<input type='hidden' id='${idCampo}' required>`;
+
+          return row;
+        }
 
 
+        function selecionarEmoji(campo, element) {
+
+          const all = document.querySelectorAll(`#row-${campo} .emoji-option`);
+          const index = element.dataset.index;
+
+          // Se já estava selecionado → desmarca
+          if (element.classList.contains("emoji-selected")) {
+            element.classList.remove("emoji-selected");
+            document.getElementById(campo).value = "";
+            return;
+          }
+
+          // Limpa seleção anterior
+          all.forEach(e => e.classList.remove("emoji-selected"));
+
+          // Marca o novo
+          element.classList.add("emoji-selected");
+
+          // Salva valor
+          document.getElementById(campo).value = element.dataset.value;
+
+          // Animação
+          element.style.transform = "scale(1.55)";
+          setTimeout(() => {
+            element.style.transform = "scale(1.35)";
+          }, 120);
+        }
       </script>
 
       <!-- Avaliações -->
@@ -178,11 +247,10 @@ function selecionarEmoji(campo, element) {
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    
-document.getElementById("area-facilidade").innerHTML = criarLinhaEmojis("facilidade");
-document.getElementById("area-utilidade").innerHTML = criarLinhaEmojis("utilidade");
-document.getElementById("area-velocidade").innerHTML = criarLinhaEmojis("velocidade");
-document.getElementById("area-clareza").innerHTML = criarLinhaEmojis("clareza");
+    document.getElementById("area-facilidade").innerHTML = criarLinhaEmojis("facilidade");
+    document.getElementById("area-utilidade").innerHTML = criarLinhaEmojis("utilidade");
+    document.getElementById("area-velocidade").innerHTML = criarLinhaEmojis("velocidade");
+    document.getElementById("area-clareza").innerHTML = criarLinhaEmojis("clareza");
 
     const form = document.getElementById("form");
 
@@ -190,19 +258,19 @@ document.getElementById("area-clareza").innerHTML = criarLinhaEmojis("clareza");
       e.preventDefault();
 
       const data = {
-  nome: document.getElementById("nome").value,
-  email: document.getElementById("email").value,
-  facilidade: document.getElementById("facilidade").value,  // <- ADICIONADO
-  utilidade: document.getElementById("utilidade").value,
-  velocidade: document.getElementById("velocidade").value,
-  clareza: document.getElementById("clareza").value,
-  ajudou: document.getElementById("ajudou").value,
-  melhorar: document.getElementById("melhorar").value,
-  momentos: document.getElementById("momentos").value,
-  mudar: document.getElementById("mudar").value,
-  beneficio: document.getElementById("beneficio").value,
-  experiencia: document.getElementById("experiencia").value,
-};
+        nome: document.getElementById("nome").value,
+        email: document.getElementById("email").value,
+        facilidade: document.getElementById("facilidade").value,
+        utilidade: document.getElementById("utilidade").value,
+        velocidade: document.getElementById("velocidade").value,
+        clareza: document.getElementById("clareza").value,
+        ajudou: document.getElementById("ajudou").value,
+        melhorar: document.getElementById("melhorar").value,
+        momentos: document.getElementById("momentos").value,
+        mudar: document.getElementById("mudar").value,
+        beneficio: document.getElementById("beneficio").value,
+        experiencia: document.getElementById("experiencia").value,
+      };
 
       const { error } = await supabase.from("respostas").insert(data);
 
